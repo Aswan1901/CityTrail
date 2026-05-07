@@ -1,11 +1,10 @@
-package com.example.CityTrail.Conctroller;
+package com.example.CityTrail.Controller;
 
 
 import java.util.List;
 
 import com.example.CityTrail.Entity.City;
 import com.example.CityTrail.Repository.CityRepository;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.example.CityTrail.DataNotFoundException;
 
