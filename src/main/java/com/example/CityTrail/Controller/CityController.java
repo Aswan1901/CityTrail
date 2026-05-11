@@ -33,7 +33,7 @@ class CityController {
         return cityRepository.findById(id).orElseThrow(()-> new DataNotFoundException("City",id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     City replaceCity(@RequestBody City newCity, @PathVariable Long id){
         return cityRepository.findById(id)
                 .map(city -> {
@@ -46,7 +46,7 @@ class CityController {
                 });
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     void deleteCity(@PathVariable Long id){
         cityRepository.deleteById(id);
     }
