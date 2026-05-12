@@ -50,7 +50,6 @@ class UserController {
 
     @DeleteMapping("/delete/{id}")
     void deleteUser(@PathVariable Long id){
-
         userRepository.deleteById(id);
     }
 }
