@@ -33,7 +33,7 @@ class TripController {
         return tripRepository.findById(id).orElseThrow(()-> new DataNotFoundException("Trip",id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     Trip replaceTrip(@RequestBody Trip newTrip, @PathVariable Long id){
         return tripRepository.findById(id)
                 .map(trip -> {
@@ -49,7 +49,7 @@ class TripController {
                 });
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     void deleteTrip(@PathVariable Long id){
         tripRepository.deleteById(id);
     }
