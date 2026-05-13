@@ -1,6 +1,8 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile       # use dev dockerfile
     ports:
       - "8080:8080"
     depends_on:
@@ -9,6 +11,12 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/citytrailDB
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_POLL_INTERVAL: "2000"
+    volumes:
+      - ./src:/app/src                  # your source changes flow in
+      - ./build:/app/build              # compiled classes flow out
+      - gradle-cache:/home/gradle/.gradle  # cache deps
 
   db:
     image: postgres:16
@@ -18,3 +26,6 @@ services:
       POSTGRES_PASSWORD: secret
     ports:
       - "5432:5432"
+
+volumes:
+  gradle-cache:

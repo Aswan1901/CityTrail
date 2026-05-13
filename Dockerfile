@@ -1,12 +1,10 @@
-# Build
-FROM gradle:8-jdk21 AS build
+FROM gradle:8-jdk21
 WORKDIR /app
-COPY . .
-RUN gradle bootJar --no-daemon
 
-# Run
-FROM eclipse-temurin:21-jre
-WORKDIR /app
-COPY --from=build /app/build/libs/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Cache dependencies first
+COPY build.gradle settings.gradle ./
+RUN gradle dependencies --no-daemon
+
+COPY src ./src
+
+CMD ["gradle", "bootRun", "--no-daemon"]
