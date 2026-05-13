@@ -1,18 +1,33 @@
 package com.example.CityTrail.Entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String username;
     private String password;
     private String email;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<>();
+    }
+
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return true; }
 
     protected User() {}
 
@@ -25,8 +40,8 @@ public class User {
     @Override
     public String toString() {
         return String.format(
-                "User[id=%d, username='%s', password='%s, email='%s']",
-                id, username, password, email);
+                "User[id=%d, username='%s', email='%s']",
+                id, username, email);
     }
 
     public Long getId() {

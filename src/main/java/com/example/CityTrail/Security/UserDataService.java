@@ -1,5 +1,6 @@
 package com.example.CityTrail.Security;
 
+import com.example.CityTrail.Repository.UserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,11 +10,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDataService implements UserDetailsService {
 
+    private final UserRepository userRepository;
+
+    public UserDataService(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return User.builder()
-                .username("user")
-                .password("$2a$12$4leyAR.ClA1VZo.k7800NObq8ZRd5L13/5CeotFoHCZ1UH1BqClsa")
-                .build();
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
