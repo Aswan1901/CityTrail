@@ -2,10 +2,10 @@ package com.example.CityTrail.Entity;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -19,9 +19,12 @@ public class User implements UserDetails {
     private String password;
     private String email;
 
+    @Column(nullable = false)
+    private String role = "ROLE_USER"; // "ROLE_USER" ou "ROLE_ADMIN"
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override public boolean isAccountNonExpired() { return true; }
@@ -60,6 +63,8 @@ public class User implements UserDetails {
         return password;
     }
 
+    public String getRole(){return role;}
+
     public void setUsername(String username){
         this.username = username;
     }
@@ -70,5 +75,9 @@ public class User implements UserDetails {
 
     public void setEmail(String email){
         this.email = email;
+    }
+
+    public void setRole(String role){
+        this.role = role;
     }
 }

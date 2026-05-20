@@ -1,7 +1,6 @@
-package com.example.CityTrail.Security;
+package com.example.CityTrail.Service;
 
 import com.example.CityTrail.Repository.UserRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
