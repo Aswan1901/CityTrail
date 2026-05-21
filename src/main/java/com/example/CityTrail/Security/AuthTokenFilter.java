@@ -13,7 +13,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.security.core.context.SecurityContextHolder;
-import com.example.CityTrail.Security.JwtUtils;
 
 import java.io.IOException;
 
