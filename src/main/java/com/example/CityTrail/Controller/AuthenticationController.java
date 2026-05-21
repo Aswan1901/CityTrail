@@ -54,9 +54,9 @@ public class AuthenticationController {
             return "user already exists";
     }
     final User newUser = new User(
-            null,
             user.getUsername(),
-            encoder.encode(user.getPassword())
+            encoder.encode(user.getPassword()),
+            user.getEmail()
     );
         userRepository.save(newUser);
         return "User registered successfully";
