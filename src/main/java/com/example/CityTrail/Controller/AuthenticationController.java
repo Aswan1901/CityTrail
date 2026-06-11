@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -37,28 +42,50 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signin")
-    public String authenticateUser(@RequestBody User user){
+    public ResponseEntity<?> authenticateUser(@RequestBody User user){
+        //Cherche l'utilisateur par email
+        User existingUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        user.getUsername(),
+                        existingUser.getEmail(),
                         user.getPassword()
                 )
         );
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtUtils.generateToken(userDetails.getUsername());
+
+        String token = jwtUtils.generateToken(userDetails.getUsername());
+
+        Map<String, String> response = new HashMap<>();
+        response.put("accessToken", token);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/signup")
-    public String registerUser(@RequestBody User user){
+    public ResponseEntity<?> registerUser(@RequestBody User user){
+
         if (userRepository.existsByUsername(user.getUsername())) {
-            return "user already exists";
-    }
+            return ResponseEntity.status(409).body("user already exists");
+        }
+
+        if(userRepository.existsByEmail(user.getEmail())){
+            return ResponseEntity.status(409).body("email already exists");
+        }
+
     final User newUser = new User(
             user.getUsername(),
             encoder.encode(user.getPassword()),
             user.getEmail()
     );
         userRepository.save(newUser);
-        return "User registered successfully";
+
+        //génère le token apres l'inscription
+        String token = jwtUtils.generateToken(newUser.getUsername());
+
+        Map<String, String> response = new HashMap<>();
+        response.put("accessToken", token);
+
+        return ResponseEntity.ok(response);
     }
 }
