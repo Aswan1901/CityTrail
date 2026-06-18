@@ -3,6 +3,7 @@ package com.example.CityTrail.Controller;
 import com.example.CityTrail.Entity.User;
 import com.example.CityTrail.Repository.UserRepository;
 import com.example.CityTrail.Security.JwtUtils;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,7 +43,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@RequestBody User user){
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody User user){
         //Cherche l'utilisateur par email
         User existingUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -63,7 +64,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody User user){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user){
 
         if (userRepository.existsByUsername(user.getUsername())) {
             return ResponseEntity.status(409).body("user already exists");

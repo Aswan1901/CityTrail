@@ -5,7 +5,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
-import java.util.List;
+import java.util.List; 
+import jakarta.validation.constraints.*;
+
 
 @Entity
 @Table(name = "users")
@@ -14,10 +16,19 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
+    @NotBlank(message = "username can not be blank")
+    @Size(min = 3, max = 15, message = "sernames needs to be between 3 to 15 characters")
     private String username;
+
+    @NotBlank(message =  "password can not be blank")
+    @Size(min = 5, message = "password needs to be 5 characters minimum")
     private String password;
+
     @Column(unique = true)
+    @NotBlank(message = "email can not be blank")
+    @Email(message = "you need a valid email")
     private String email;
 
     @Column(nullable = false)

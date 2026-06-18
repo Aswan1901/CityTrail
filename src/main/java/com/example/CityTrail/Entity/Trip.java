@@ -3,6 +3,7 @@ package com.example.CityTrail.Entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Trip {
@@ -10,12 +11,18 @@ public class Trip {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "city_id")
+    @NotBlank(message = "can not be blank")
     private City city;
+
     private LocalDate startDate;
+
     private LocalDate endDate;
+
     private int rating;
+
     private String personalNote;
 
     protected Trip() {}

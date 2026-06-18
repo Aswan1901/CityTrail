@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.CityTrail.Entity.User;
 import com.example.CityTrail.Repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import com.example.CityTrail.DataNotFoundException;
 
@@ -25,7 +26,7 @@ class UserController {
     }
 
     @PostMapping("/save")
-    User newUser(@RequestBody User newUser){
+    User newUser(@Valid @RequestBody User newUser){
         return userRepository.save(newUser);
     }
 
@@ -35,7 +36,7 @@ class UserController {
     }
 
     @PutMapping("/update/{id}")
-    User replaceUser(@RequestBody User newUser, @PathVariable Long id){
+    User replaceUser(@Valid @RequestBody User newUser, @PathVariable Long id){
         return userRepository.findById(id)
                 .map(user -> {
                     user.setUsername(newUser.getUsername());
