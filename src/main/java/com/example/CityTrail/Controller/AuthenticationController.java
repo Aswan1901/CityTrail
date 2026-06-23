@@ -1,6 +1,7 @@
 package com.example.CityTrail.Controller;
 
 import com.example.CityTrail.Entity.User;
+import com.example.CityTrail.Dto.LoginRequest;
 import com.example.CityTrail.Repository.UserRepository;
 import com.example.CityTrail.Security.JwtUtils;
 import jakarta.validation.Valid;
@@ -43,17 +44,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody User user){
-        //Cherche l'utilisateur par email
-        User existingUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        existingUser.getEmail(),
-                        user.getPassword()
+                        request.getEmail(),
+                        request.getPassword()
                 )
         );
-        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         String token = jwtUtils.generateToken(userDetails.getUsername());
 
